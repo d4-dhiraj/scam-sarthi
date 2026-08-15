@@ -1,0 +1,39 @@
+services:
+  # Backend Node.js / Express Service
+  - type: web
+    name: scamsaarthi-backend
+    env: node
+    region: singapore # Or any preferred region
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: MONGO_URI
+        sync: false # Set securely in Render Dashboard
+      - key: JWT_SECRET
+        sync: false # Set securely in Render Dashboard
+      - key: FEATHERLESS_API_KEY
+        sync: false # Set securely in Render Dashboard
+      - key: FIRECRAWL_API_KEY
+        sync: false # Set securely in Render Dashboard
+      - key: WOLFRAM_APP_ID
+        sync: false # Set securely in Render Dashboard
+      - key: CLIENT_URL
+        value: https://scamsaarthi-frontend.onrender.com # Adjust after frontend creation
+
+  # Frontend Vite / React Service
+  - type: web
+    name: scamsaarthi-frontend
+    env: static
+    region: singapore
+    buildCommand: cd client && npm install && npm run build
+    staticPublishPath: ./client/dist
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Vite requires VITE_ prefix for env vars exposed to client if we use them
+      # We would need to change api/index.js if we use env vars for API URL, 
+      # but for now we'll assume it will be mapped properly or we can configure it.
